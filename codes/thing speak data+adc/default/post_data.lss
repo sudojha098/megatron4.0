@@ -1,0 +1,753 @@
+
+post_data.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000002aa  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         000000a4  00800060  000002aa  0000033e  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000004  00800104  00800104  000003e2  2**0
+                  ALLOC
+  3 .debug_aranges 00000020  00000000  00000000  000003e2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_pubnames 000000a3  00000000  00000000  00000402  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000622  00000000  00000000  000004a5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000020c  00000000  00000000  00000ac7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000004c8  00000000  00000000  00000cd3  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000a0  00000000  00000000  0000119c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000140  00000000  00000000  0000123c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000294  00000000  00000000  0000137c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 000000f0  00000000  00000000  00001610  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	2c c0       	rjmp	.+88     	; 0x5c <__bad_interrupt>
+   4:	2b c0       	rjmp	.+86     	; 0x5c <__bad_interrupt>
+   6:	2a c0       	rjmp	.+84     	; 0x5c <__bad_interrupt>
+   8:	29 c0       	rjmp	.+82     	; 0x5c <__bad_interrupt>
+   a:	28 c0       	rjmp	.+80     	; 0x5c <__bad_interrupt>
+   c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
+   e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
+  10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
+  12:	24 c0       	rjmp	.+72     	; 0x5c <__bad_interrupt>
+  14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
+  16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
+  18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
+  1a:	20 c0       	rjmp	.+64     	; 0x5c <__bad_interrupt>
+  1c:	1f c0       	rjmp	.+62     	; 0x5c <__bad_interrupt>
+  1e:	1e c0       	rjmp	.+60     	; 0x5c <__bad_interrupt>
+  20:	1d c0       	rjmp	.+58     	; 0x5c <__bad_interrupt>
+  22:	1c c0       	rjmp	.+56     	; 0x5c <__bad_interrupt>
+  24:	1b c0       	rjmp	.+54     	; 0x5c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	11 e0       	ldi	r17, 0x01	; 1
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	ea ea       	ldi	r30, 0xAA	; 170
+  3a:	f2 e0       	ldi	r31, 0x02	; 2
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <.do_copy_data_start>
+
+0000003e <.do_copy_data_loop>:
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+
+00000042 <.do_copy_data_start>:
+  42:	a4 30       	cpi	r26, 0x04	; 4
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <.do_copy_data_loop>
+
+00000048 <__do_clear_bss>:
+  48:	11 e0       	ldi	r17, 0x01	; 1
+  4a:	a4 e0       	ldi	r26, 0x04	; 4
+  4c:	b1 e0       	ldi	r27, 0x01	; 1
+  4e:	01 c0       	rjmp	.+2      	; 0x52 <.do_clear_bss_start>
+
+00000050 <.do_clear_bss_loop>:
+  50:	1d 92       	st	X+, r1
+
+00000052 <.do_clear_bss_start>:
+  52:	a8 30       	cpi	r26, 0x08	; 8
+  54:	b1 07       	cpc	r27, r17
+  56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
+  58:	67 d0       	rcall	.+206    	; 0x128 <main>
+  5a:	25 c1       	rjmp	.+586    	; 0x2a6 <_exit>
+
+0000005c <__bad_interrupt>:
+  5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
+
+0000005e <uart_init>:
+#ifndef _UART_H_
+#define _UART_H_
+
+void uart_init()
+{
+	UCSRA=0;
+  5e:	1b b8       	out	0x0b, r1	; 11
+	UBRRH=0;
+  60:	10 bc       	out	0x20, r1	; 32
+	UBRRL=8;
+  62:	88 e0       	ldi	r24, 0x08	; 8
+  64:	89 b9       	out	0x09, r24	; 9
+	UCSRB=0b00011000;
+  66:	88 e1       	ldi	r24, 0x18	; 24
+  68:	8a b9       	out	0x0a, r24	; 10
+	UCSRC=0b10000110;
+  6a:	86 e8       	ldi	r24, 0x86	; 134
+  6c:	80 bd       	out	0x20, r24	; 32
+	
+
+	//uart_delay(100);
+}
+  6e:	08 95       	ret
+
+00000070 <uart_char>:
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+  70:	5d 9b       	sbis	0x0b, 5	; 11
+  72:	fe cf       	rjmp	.-4      	; 0x70 <uart_char>
+	UDR=t;
+  74:	8c b9       	out	0x0c, r24	; 12
+}
+  76:	08 95       	ret
+
+00000078 <uart_num>:
+	uart_delay(100);
+}
+
+ 
+void uart_num(unsigned char num)
+{
+  78:	cf 93       	push	r28
+  7a:	df 93       	push	r29
+  7c:	48 2f       	mov	r20, r24
+    unsigned char H=0,T=0,O=0;
+	H=num/100;
+  7e:	64 e6       	ldi	r22, 0x64	; 100
+  80:	df d0       	rcall	.+446    	; 0x240 <__udivmodqi4>
+  82:	e8 2f       	mov	r30, r24
+	T=(num - (H*100))/10;
+  84:	28 2f       	mov	r18, r24
+  86:	30 e0       	ldi	r19, 0x00	; 0
+  88:	8c e9       	ldi	r24, 0x9C	; 156
+  8a:	9f ef       	ldi	r25, 0xFF	; 255
+  8c:	28 9f       	mul	r18, r24
+  8e:	e0 01       	movw	r28, r0
+  90:	29 9f       	mul	r18, r25
+  92:	d0 0d       	add	r29, r0
+  94:	38 9f       	mul	r19, r24
+  96:	d0 0d       	add	r29, r0
+  98:	11 24       	eor	r1, r1
+  9a:	ce 01       	movw	r24, r28
+  9c:	84 0f       	add	r24, r20
+  9e:	91 1d       	adc	r25, r1
+  a0:	6a e0       	ldi	r22, 0x0A	; 10
+  a2:	70 e0       	ldi	r23, 0x00	; 0
+  a4:	d9 d0       	rcall	.+434    	; 0x258 <__divmodhi4>
+	//uart_delay(100);
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+  a6:	5d 9b       	sbis	0x0b, 5	; 11
+  a8:	fe cf       	rjmp	.-4      	; 0xa6 <uart_num+0x2e>
+    unsigned char H=0,T=0,O=0;
+	H=num/100;
+	T=(num - (H*100))/10;
+	O=(num - (H*100) - (T*10));
+	
+	uart_char(H+48);
+  aa:	e0 5d       	subi	r30, 0xD0	; 208
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+	UDR=t;
+  ac:	ec b9       	out	0x0c, r30	; 12
+	//uart_delay(100);
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+  ae:	5d 9b       	sbis	0x0b, 5	; 11
+  b0:	fe cf       	rjmp	.-4      	; 0xae <uart_num+0x36>
+	H=num/100;
+	T=(num - (H*100))/10;
+	O=(num - (H*100) - (T*10));
+	
+	uart_char(H+48);
+	uart_char(T+48);
+  b2:	60 5d       	subi	r22, 0xD0	; 208
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+	UDR=t;
+  b4:	6c b9       	out	0x0c, r22	; 12
+  b6:	60 53       	subi	r22, 0x30	; 48
+	//uart_delay(100);
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+  b8:	5d 9b       	sbis	0x0b, 5	; 11
+  ba:	fe cf       	rjmp	.-4      	; 0xb8 <uart_num+0x40>
+	T=(num - (H*100))/10;
+	O=(num - (H*100) - (T*10));
+	
+	uart_char(H+48);
+	uart_char(T+48);
+	uart_char(O+48);	
+  bc:	40 5d       	subi	r20, 0xD0	; 208
+  be:	4c 0f       	add	r20, r28
+  c0:	86 ef       	ldi	r24, 0xF6	; 246
+  c2:	9f ef       	ldi	r25, 0xFF	; 255
+  c4:	68 9f       	mul	r22, r24
+  c6:	80 2d       	mov	r24, r0
+  c8:	11 24       	eor	r1, r1
+  ca:	84 0f       	add	r24, r20
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+	UDR=t;
+  cc:	8c b9       	out	0x0c, r24	; 12
+	O=(num - (H*100) - (T*10));
+	
+	uart_char(H+48);
+	uart_char(T+48);
+	uart_char(O+48);	
+}
+  ce:	df 91       	pop	r29
+  d0:	cf 91       	pop	r28
+  d2:	08 95       	ret
+
+000000d4 <uart_read>:
+ 
+unsigned char uart_read()
+{
+		while((UCSRA & 0b10000000)==0);
+  d4:	5f 9b       	sbis	0x0b, 7	; 11
+  d6:	fe cf       	rjmp	.-4      	; 0xd4 <uart_read>
+	return UDR;
+  d8:	8c b1       	in	r24, 0x0c	; 12
+}
+  da:	08 95       	ret
+
+000000dc <uart_delay>:
+ 
+void uart_delay(unsigned int delaytime)
+{
+  dc:	88 ee       	ldi	r24, 0xE8	; 232
+  de:	93 e0       	ldi	r25, 0x03	; 3
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+  e0:	20 e9       	ldi	r18, 0x90	; 144
+  e2:	31 e0       	ldi	r19, 0x01	; 1
+  e4:	f9 01       	movw	r30, r18
+  e6:	31 97       	sbiw	r30, 0x01	; 1
+  e8:	f1 f7       	brne	.-4      	; 0xe6 <uart_delay+0xa>
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+  ea:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+  ec:	d9 f7       	brne	.-10     	; 0xe4 <uart_delay+0x8>
+	_delay_ms(100);
+}
+  ee:	08 95       	ret
+
+000000f0 <uart_string>:
+	UDR=t;
+}
+
+ 
+void uart_string(char a[])
+{
+  f0:	fc 01       	movw	r30, r24
+  f2:	04 c0       	rjmp	.+8      	; 0xfc <uart_string+0xc>
+	//uart_delay(100);
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+  f4:	5d 9b       	sbis	0x0b, 5	; 11
+  f6:	fe cf       	rjmp	.-4      	; 0xf4 <uart_string+0x4>
+	UDR=t;
+  f8:	8c b9       	out	0x0c, r24	; 12
+  fa:	31 96       	adiw	r30, 0x01	; 1
+ 
+void uart_string(char a[])
+{
+	
+	int i;
+	for(i=0;a[i]!='\0';i++)
+  fc:	80 81       	ld	r24, Z
+  fe:	88 23       	and	r24, r24
+ 100:	c9 f7       	brne	.-14     	; 0xf4 <uart_string+0x4>
+	uart_char(a[i]);
+	uart_delay(100);
+ 102:	84 e6       	ldi	r24, 0x64	; 100
+ 104:	90 e0       	ldi	r25, 0x00	; 0
+ 106:	ea df       	rcall	.-44     	; 0xdc <uart_delay>
+}
+ 108:	08 95       	ret
+
+0000010a <adc_init>:
+
+unsigned int adcdata,adcdata1;
+
+ void adc_init()
+ {
+  ADCSRA=0X86;						//ADC enable, ADC interrupt enable, set prescaller to 64
+ 10a:	86 e8       	ldi	r24, 0x86	; 134
+ 10c:	86 b9       	out	0x06, r24	; 6
+  		
+ }
+ 10e:	08 95       	ret
+
+00000110 <getdata>:
+ unsigned char getdata(unsigned char chno)	
+  {
+    ADMUX=0X60;						//right align the ADC result
+ 110:	90 e6       	ldi	r25, 0x60	; 96
+ 112:	97 b9       	out	0x07, r25	; 7
+    ADMUX|=chno;					//select the ADC channel
+ 114:	97 b1       	in	r25, 0x07	; 7
+ 116:	98 2b       	or	r25, r24
+ 118:	97 b9       	out	0x07, r25	; 7
+    ADCSRA|=0X40;					//start ADC convertion
+ 11a:	36 9a       	sbi	0x06, 6	; 6
+ 11c:	80 ea       	ldi	r24, 0xA0	; 160
+ 11e:	9f e0       	ldi	r25, 0x0F	; 15
+ 120:	01 97       	sbiw	r24, 0x01	; 1
+ 122:	f1 f7       	brne	.-4      	; 0x120 <getdata+0x10>
+    _delay_ms(1);					//give some time delay to complit the aDC convertion
+	return ADCH;
+ 124:	85 b1       	in	r24, 0x05	; 5
+  }
+ 126:	08 95       	ret
+
+00000128 <main>:
+#include<util/delay.h>
+#include "uart.h"
+#include"adc.h"
+
+void main()
+{
+ 128:	df 92       	push	r13
+ 12a:	ef 92       	push	r14
+ 12c:	ff 92       	push	r15
+ 12e:	0f 93       	push	r16
+ 130:	1f 93       	push	r17
+ 132:	cf 93       	push	r28
+ 134:	df 93       	push	r29
+DDRB=0b11111111;
+ 136:	8f ef       	ldi	r24, 0xFF	; 255
+ 138:	87 bb       	out	0x17, r24	; 23
+DDRD=0xFF;
+ 13a:	81 bb       	out	0x11, r24	; 17
+PORTB=0b1111111;
+ 13c:	8f e7       	ldi	r24, 0x7F	; 127
+ 13e:	88 bb       	out	0x18, r24	; 24
+#ifndef _UART_H_
+#define _UART_H_
+
+void uart_init()
+{
+	UCSRA=0;
+ 140:	1b b8       	out	0x0b, r1	; 11
+	UBRRH=0;
+ 142:	10 bc       	out	0x20, r1	; 32
+	UBRRL=8;
+ 144:	88 e0       	ldi	r24, 0x08	; 8
+ 146:	89 b9       	out	0x09, r24	; 9
+	UCSRB=0b00011000;
+ 148:	88 e1       	ldi	r24, 0x18	; 24
+ 14a:	8a b9       	out	0x0a, r24	; 10
+	UCSRC=0b10000110;
+ 14c:	86 e8       	ldi	r24, 0x86	; 134
+ 14e:	80 bd       	out	0x20, r24	; 32
+
+unsigned int adcdata,adcdata1;
+
+ void adc_init()
+ {
+  ADCSRA=0X86;						//ADC enable, ADC interrupt enable, set prescaller to 64
+ 150:	86 b9       	out	0x06, r24	; 6
+ 152:	80 e1       	ldi	r24, 0x10	; 16
+ 154:	97 e2       	ldi	r25, 0x27	; 39
+ 156:	20 e9       	ldi	r18, 0x90	; 144
+ 158:	31 e0       	ldi	r19, 0x01	; 1
+ 15a:	f9 01       	movw	r30, r18
+ 15c:	31 97       	sbiw	r30, 0x01	; 1
+ 15e:	f1 f7       	brne	.-4      	; 0x15c <main+0x34>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 160:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 162:	d9 f7       	brne	.-10     	; 0x15a <main+0x32>
+
+unsigned char digital;
+uart_init();
+adc_init();
+_delay_ms(1000);
+uart_string("AT+CWMODE=3\r\n");
+ 164:	80 e6       	ldi	r24, 0x60	; 96
+ 166:	90 e0       	ldi	r25, 0x00	; 0
+ 168:	c3 df       	rcall	.-122    	; 0xf0 <uart_string>
+ 16a:	80 e3       	ldi	r24, 0x30	; 48
+ 16c:	95 e7       	ldi	r25, 0x75	; 117
+ 16e:	20 e9       	ldi	r18, 0x90	; 144
+ 170:	31 e0       	ldi	r19, 0x01	; 1
+ 172:	f9 01       	movw	r30, r18
+ 174:	31 97       	sbiw	r30, 0x01	; 1
+ 176:	f1 f7       	brne	.-4      	; 0x174 <main+0x4c>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 178:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 17a:	d9 f7       	brne	.-10     	; 0x172 <main+0x4a>
+_delay_ms(3000);
+
+
+uart_string("AT+CWJAP=\"sud\",\"iloveyou\"\r\n");
+ 17c:	8e e6       	ldi	r24, 0x6E	; 110
+ 17e:	90 e0       	ldi	r25, 0x00	; 0
+ 180:	b7 df       	rcall	.-146    	; 0xf0 <uart_string>
+ 182:	80 e5       	ldi	r24, 0x50	; 80
+ 184:	93 ec       	ldi	r25, 0xC3	; 195
+ 186:	20 e9       	ldi	r18, 0x90	; 144
+ 188:	31 e0       	ldi	r19, 0x01	; 1
+ 18a:	f9 01       	movw	r30, r18
+ 18c:	31 97       	sbiw	r30, 0x01	; 1
+ 18e:	f1 f7       	brne	.-4      	; 0x18c <main+0x64>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 190:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 192:	d9 f7       	brne	.-10     	; 0x18a <main+0x62>
+ 194:	80 e5       	ldi	r24, 0x50	; 80
+ 196:	93 ec       	ldi	r25, 0xC3	; 195
+ 198:	20 e9       	ldi	r18, 0x90	; 144
+ 19a:	31 e0       	ldi	r19, 0x01	; 1
+ 19c:	f9 01       	movw	r30, r18
+ 19e:	31 97       	sbiw	r30, 0x01	; 1
+ 1a0:	f1 f7       	brne	.-4      	; 0x19e <main+0x76>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 1a2:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 1a4:	d9 f7       	brne	.-10     	; 0x19c <main+0x74>
+ 1a6:	80 e5       	ldi	r24, 0x50	; 80
+ 1a8:	93 ec       	ldi	r25, 0xC3	; 195
+ 1aa:	20 e9       	ldi	r18, 0x90	; 144
+ 1ac:	31 e0       	ldi	r19, 0x01	; 1
+ 1ae:	f9 01       	movw	r30, r18
+ 1b0:	31 97       	sbiw	r30, 0x01	; 1
+ 1b2:	f1 f7       	brne	.-4      	; 0x1b0 <main+0x88>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 1b4:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 1b6:	d9 f7       	brne	.-10     	; 0x1ae <main+0x86>
+  		
+ }
+ unsigned char getdata(unsigned char chno)	
+  {
+    ADMUX=0X60;						//right align the ADC result
+ 1b8:	90 e6       	ldi	r25, 0x60	; 96
+ 1ba:	d9 2e       	mov	r13, r25
+ 1bc:	80 ea       	ldi	r24, 0xA0	; 160
+ 1be:	e8 2e       	mov	r14, r24
+ 1c0:	8f e0       	ldi	r24, 0x0F	; 15
+ 1c2:	f8 2e       	mov	r15, r24
+if(digital >=180)
+	{
+	  PORTD=0;
+	}
+else
+	PORTD=0xFF;
+ 1c4:	c0 e9       	ldi	r28, 0x90	; 144
+ 1c6:	d1 e0       	ldi	r29, 0x01	; 1
+ 1c8:	0f ef       	ldi	r16, 0xFF	; 255
+ 1ca:	d7 b8       	out	0x07, r13	; 7
+    ADMUX|=chno;					//select the ADC channel
+ 1cc:	87 b1       	in	r24, 0x07	; 7
+ 1ce:	87 b9       	out	0x07, r24	; 7
+    ADCSRA|=0X40;					//start ADC convertion
+ 1d0:	36 9a       	sbi	0x06, 6	; 6
+ 1d2:	c7 01       	movw	r24, r14
+ 1d4:	01 97       	sbiw	r24, 0x01	; 1
+ 1d6:	f1 f7       	brne	.-4      	; 0x1d4 <main+0xac>
+    _delay_ms(1);					//give some time delay to complit the aDC convertion
+	return ADCH;
+ 1d8:	15 b1       	in	r17, 0x05	; 5
+
+while(1)
+{
+digital=getdata(0);
+
+uart_string("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80\r\n");
+ 1da:	8a e8       	ldi	r24, 0x8A	; 138
+ 1dc:	90 e0       	ldi	r25, 0x00	; 0
+ 1de:	88 df       	rcall	.-240    	; 0xf0 <uart_string>
+ 1e0:	80 e3       	ldi	r24, 0x30	; 48
+ 1e2:	95 e7       	ldi	r25, 0x75	; 117
+ 1e4:	fe 01       	movw	r30, r28
+ 1e6:	31 97       	sbiw	r30, 0x01	; 1
+ 1e8:	f1 f7       	brne	.-4      	; 0x1e6 <main+0xbe>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 1ea:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 1ec:	d9 f7       	brne	.-10     	; 0x1e4 <main+0xbc>
+_delay_ms(3000);
+
+
+uart_string("AT+CIPSEND=51\r\n");
+ 1ee:	86 eb       	ldi	r24, 0xB6	; 182
+ 1f0:	90 e0       	ldi	r25, 0x00	; 0
+ 1f2:	7e df       	rcall	.-260    	; 0xf0 <uart_string>
+ 1f4:	88 ee       	ldi	r24, 0xE8	; 232
+ 1f6:	93 e0       	ldi	r25, 0x03	; 3
+ 1f8:	fe 01       	movw	r30, r28
+ 1fa:	31 97       	sbiw	r30, 0x01	; 1
+ 1fc:	f1 f7       	brne	.-4      	; 0x1fa <main+0xd2>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 1fe:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 200:	d9 f7       	brne	.-10     	; 0x1f8 <main+0xd0>
+_delay_ms(100);
+
+uart_string("GET /update?api_key=M6DC0D32QKMT0C3C&field1=");
+ 202:	86 ec       	ldi	r24, 0xC6	; 198
+ 204:	90 e0       	ldi	r25, 0x00	; 0
+ 206:	74 df       	rcall	.-280    	; 0xf0 <uart_string>
+uart_num(digital);
+ 208:	81 2f       	mov	r24, r17
+ 20a:	36 df       	rcall	.-404    	; 0x78 <uart_num>
+uart_string("\r\n");
+ 20c:	83 ef       	ldi	r24, 0xF3	; 243
+ 20e:	90 e0       	ldi	r25, 0x00	; 0
+ 210:	6f df       	rcall	.-290    	; 0xf0 <uart_string>
+ 212:	88 ee       	ldi	r24, 0xE8	; 232
+ 214:	93 e0       	ldi	r25, 0x03	; 3
+ 216:	fe 01       	movw	r30, r28
+ 218:	31 97       	sbiw	r30, 0x01	; 1
+ 21a:	f1 f7       	brne	.-4      	; 0x218 <main+0xf0>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 21c:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 21e:	d9 f7       	brne	.-10     	; 0x216 <main+0xee>
+_delay_ms(100);
+
+if(digital >=180)
+ 220:	14 3b       	cpi	r17, 0xB4	; 180
+ 222:	10 f0       	brcs	.+4      	; 0x228 <main+0x100>
+	{
+	  PORTD=0;
+ 224:	12 ba       	out	0x12, r1	; 18
+ 226:	01 c0       	rjmp	.+2      	; 0x22a <main+0x102>
+	}
+else
+	PORTD=0xFF;
+ 228:	02 bb       	out	0x12, r16	; 18
+		
+uart_string("AT+CIPCLOSE\r\n");
+ 22a:	86 ef       	ldi	r24, 0xF6	; 246
+ 22c:	90 e0       	ldi	r25, 0x00	; 0
+ 22e:	60 df       	rcall	.-320    	; 0xf0 <uart_string>
+ 230:	80 e6       	ldi	r24, 0x60	; 96
+ 232:	9a ee       	ldi	r25, 0xEA	; 234
+ 234:	fe 01       	movw	r30, r28
+ 236:	31 97       	sbiw	r30, 0x01	; 1
+ 238:	f1 f7       	brne	.-4      	; 0x236 <main+0x10e>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 23a:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 23c:	d9 f7       	brne	.-10     	; 0x234 <main+0x10c>
+ 23e:	c5 cf       	rjmp	.-118    	; 0x1ca <main+0xa2>
+
+00000240 <__udivmodqi4>:
+ 240:	99 1b       	sub	r25, r25
+ 242:	79 e0       	ldi	r23, 0x09	; 9
+ 244:	04 c0       	rjmp	.+8      	; 0x24e <__udivmodqi4_ep>
+
+00000246 <__udivmodqi4_loop>:
+ 246:	99 1f       	adc	r25, r25
+ 248:	96 17       	cp	r25, r22
+ 24a:	08 f0       	brcs	.+2      	; 0x24e <__udivmodqi4_ep>
+ 24c:	96 1b       	sub	r25, r22
+
+0000024e <__udivmodqi4_ep>:
+ 24e:	88 1f       	adc	r24, r24
+ 250:	7a 95       	dec	r23
+ 252:	c9 f7       	brne	.-14     	; 0x246 <__udivmodqi4_loop>
+ 254:	80 95       	com	r24
+ 256:	08 95       	ret
+
+00000258 <__divmodhi4>:
+ 258:	97 fb       	bst	r25, 7
+ 25a:	09 2e       	mov	r0, r25
+ 25c:	07 26       	eor	r0, r23
+ 25e:	0a d0       	rcall	.+20     	; 0x274 <__divmodhi4_neg1>
+ 260:	77 fd       	sbrc	r23, 7
+ 262:	04 d0       	rcall	.+8      	; 0x26c <__divmodhi4_neg2>
+ 264:	0c d0       	rcall	.+24     	; 0x27e <__udivmodhi4>
+ 266:	06 d0       	rcall	.+12     	; 0x274 <__divmodhi4_neg1>
+ 268:	00 20       	and	r0, r0
+ 26a:	1a f4       	brpl	.+6      	; 0x272 <__divmodhi4_exit>
+
+0000026c <__divmodhi4_neg2>:
+ 26c:	70 95       	com	r23
+ 26e:	61 95       	neg	r22
+ 270:	7f 4f       	sbci	r23, 0xFF	; 255
+
+00000272 <__divmodhi4_exit>:
+ 272:	08 95       	ret
+
+00000274 <__divmodhi4_neg1>:
+ 274:	f6 f7       	brtc	.-4      	; 0x272 <__divmodhi4_exit>
+ 276:	90 95       	com	r25
+ 278:	81 95       	neg	r24
+ 27a:	9f 4f       	sbci	r25, 0xFF	; 255
+ 27c:	08 95       	ret
+
+0000027e <__udivmodhi4>:
+ 27e:	aa 1b       	sub	r26, r26
+ 280:	bb 1b       	sub	r27, r27
+ 282:	51 e1       	ldi	r21, 0x11	; 17
+ 284:	07 c0       	rjmp	.+14     	; 0x294 <__udivmodhi4_ep>
+
+00000286 <__udivmodhi4_loop>:
+ 286:	aa 1f       	adc	r26, r26
+ 288:	bb 1f       	adc	r27, r27
+ 28a:	a6 17       	cp	r26, r22
+ 28c:	b7 07       	cpc	r27, r23
+ 28e:	10 f0       	brcs	.+4      	; 0x294 <__udivmodhi4_ep>
+ 290:	a6 1b       	sub	r26, r22
+ 292:	b7 0b       	sbc	r27, r23
+
+00000294 <__udivmodhi4_ep>:
+ 294:	88 1f       	adc	r24, r24
+ 296:	99 1f       	adc	r25, r25
+ 298:	5a 95       	dec	r21
+ 29a:	a9 f7       	brne	.-22     	; 0x286 <__udivmodhi4_loop>
+ 29c:	80 95       	com	r24
+ 29e:	90 95       	com	r25
+ 2a0:	bc 01       	movw	r22, r24
+ 2a2:	cd 01       	movw	r24, r26
+ 2a4:	08 95       	ret
+
+000002a6 <_exit>:
+ 2a6:	f8 94       	cli
+
+000002a8 <__stop_program>:
+ 2a8:	ff cf       	rjmp	.-2      	; 0x2a8 <__stop_program>

@@ -1,0 +1,479 @@
+
+ser.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000001b0  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000008  00800060  000001b0  00000224  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .debug_aranges 00000020  00000000  00000000  0000022c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_pubnames 00000071  00000000  00000000  0000024c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   0000030f  00000000  00000000  000002bd  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 000001c7  00000000  00000000  000005cc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   000002e5  00000000  00000000  00000793  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  00000080  00000000  00000000  00000a78  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    0000010e  00000000  00000000  00000af8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    000000e9  00000000  00000000  00000c06  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 000000c0  00000000  00000000  00000cef  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	24 c0       	rjmp	.+72     	; 0x4c <__bad_interrupt>
+   4:	23 c0       	rjmp	.+70     	; 0x4c <__bad_interrupt>
+   6:	22 c0       	rjmp	.+68     	; 0x4c <__bad_interrupt>
+   8:	21 c0       	rjmp	.+66     	; 0x4c <__bad_interrupt>
+   a:	20 c0       	rjmp	.+64     	; 0x4c <__bad_interrupt>
+   c:	1f c0       	rjmp	.+62     	; 0x4c <__bad_interrupt>
+   e:	1e c0       	rjmp	.+60     	; 0x4c <__bad_interrupt>
+  10:	1d c0       	rjmp	.+58     	; 0x4c <__bad_interrupt>
+  12:	1c c0       	rjmp	.+56     	; 0x4c <__bad_interrupt>
+  14:	1b c0       	rjmp	.+54     	; 0x4c <__bad_interrupt>
+  16:	1a c0       	rjmp	.+52     	; 0x4c <__bad_interrupt>
+  18:	19 c0       	rjmp	.+50     	; 0x4c <__bad_interrupt>
+  1a:	18 c0       	rjmp	.+48     	; 0x4c <__bad_interrupt>
+  1c:	17 c0       	rjmp	.+46     	; 0x4c <__bad_interrupt>
+  1e:	16 c0       	rjmp	.+44     	; 0x4c <__bad_interrupt>
+  20:	15 c0       	rjmp	.+42     	; 0x4c <__bad_interrupt>
+  22:	14 c0       	rjmp	.+40     	; 0x4c <__bad_interrupt>
+  24:	13 c0       	rjmp	.+38     	; 0x4c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	10 e0       	ldi	r17, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	e0 eb       	ldi	r30, 0xB0	; 176
+  3a:	f1 e0       	ldi	r31, 0x01	; 1
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <.do_copy_data_start>
+
+0000003e <.do_copy_data_loop>:
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+
+00000042 <.do_copy_data_start>:
+  42:	a8 36       	cpi	r26, 0x68	; 104
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <.do_copy_data_loop>
+  48:	53 d0       	rcall	.+166    	; 0xf0 <main>
+  4a:	b0 c0       	rjmp	.+352    	; 0x1ac <_exit>
+
+0000004c <__bad_interrupt>:
+  4c:	d9 cf       	rjmp	.-78     	; 0x0 <__vectors>
+
+0000004e <uart_init>:
+#ifndef _UART_H_
+#define _UART_H_
+
+void uart_init()
+{
+	UCSRA=0;
+  4e:	1b b8       	out	0x0b, r1	; 11
+	UBRRH=0;
+  50:	10 bc       	out	0x20, r1	; 32
+	UBRRL=8;
+  52:	88 e0       	ldi	r24, 0x08	; 8
+  54:	89 b9       	out	0x09, r24	; 9
+	UCSRB=0b00011000;
+  56:	88 e1       	ldi	r24, 0x18	; 24
+  58:	8a b9       	out	0x0a, r24	; 10
+	UCSRC=0b10000110;
+  5a:	86 e8       	ldi	r24, 0x86	; 134
+  5c:	80 bd       	out	0x20, r24	; 32
+	
+
+	//uart_delay(100);
+}
+  5e:	08 95       	ret
+
+00000060 <uart_char>:
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+  60:	5d 9b       	sbis	0x0b, 5	; 11
+  62:	fe cf       	rjmp	.-4      	; 0x60 <uart_char>
+	UDR=t;
+  64:	8c b9       	out	0x0c, r24	; 12
+}
+  66:	08 95       	ret
+
+00000068 <uart_num>:
+	uart_delay(100);
+}
+
+ 
+void uart_num(unsigned char num)
+{
+  68:	cf 93       	push	r28
+  6a:	df 93       	push	r29
+  6c:	48 2f       	mov	r20, r24
+    unsigned char H=0,T=0,O=0;
+	H=num/100;
+  6e:	64 e6       	ldi	r22, 0x64	; 100
+  70:	6a d0       	rcall	.+212    	; 0x146 <__udivmodqi4>
+  72:	e8 2f       	mov	r30, r24
+	T=(num - (H*100))/10;
+  74:	28 2f       	mov	r18, r24
+  76:	30 e0       	ldi	r19, 0x00	; 0
+  78:	8c e9       	ldi	r24, 0x9C	; 156
+  7a:	9f ef       	ldi	r25, 0xFF	; 255
+  7c:	28 9f       	mul	r18, r24
+  7e:	e0 01       	movw	r28, r0
+  80:	29 9f       	mul	r18, r25
+  82:	d0 0d       	add	r29, r0
+  84:	38 9f       	mul	r19, r24
+  86:	d0 0d       	add	r29, r0
+  88:	11 24       	eor	r1, r1
+  8a:	ce 01       	movw	r24, r28
+  8c:	84 0f       	add	r24, r20
+  8e:	91 1d       	adc	r25, r1
+  90:	6a e0       	ldi	r22, 0x0A	; 10
+  92:	70 e0       	ldi	r23, 0x00	; 0
+  94:	64 d0       	rcall	.+200    	; 0x15e <__divmodhi4>
+	//uart_delay(100);
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+  96:	5d 9b       	sbis	0x0b, 5	; 11
+  98:	fe cf       	rjmp	.-4      	; 0x96 <uart_num+0x2e>
+    unsigned char H=0,T=0,O=0;
+	H=num/100;
+	T=(num - (H*100))/10;
+	O=(num - (H*100) - (T*10));
+	
+	uart_char(H+48);
+  9a:	e0 5d       	subi	r30, 0xD0	; 208
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+	UDR=t;
+  9c:	ec b9       	out	0x0c, r30	; 12
+	//uart_delay(100);
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+  9e:	5d 9b       	sbis	0x0b, 5	; 11
+  a0:	fe cf       	rjmp	.-4      	; 0x9e <uart_num+0x36>
+	H=num/100;
+	T=(num - (H*100))/10;
+	O=(num - (H*100) - (T*10));
+	
+	uart_char(H+48);
+	uart_char(T+48);
+  a2:	60 5d       	subi	r22, 0xD0	; 208
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+	UDR=t;
+  a4:	6c b9       	out	0x0c, r22	; 12
+  a6:	60 53       	subi	r22, 0x30	; 48
+	//uart_delay(100);
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+  a8:	5d 9b       	sbis	0x0b, 5	; 11
+  aa:	fe cf       	rjmp	.-4      	; 0xa8 <uart_num+0x40>
+	T=(num - (H*100))/10;
+	O=(num - (H*100) - (T*10));
+	
+	uart_char(H+48);
+	uart_char(T+48);
+	uart_char(O+48);	
+  ac:	40 5d       	subi	r20, 0xD0	; 208
+  ae:	4c 0f       	add	r20, r28
+  b0:	86 ef       	ldi	r24, 0xF6	; 246
+  b2:	9f ef       	ldi	r25, 0xFF	; 255
+  b4:	68 9f       	mul	r22, r24
+  b6:	80 2d       	mov	r24, r0
+  b8:	11 24       	eor	r1, r1
+  ba:	84 0f       	add	r24, r20
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+	UDR=t;
+  bc:	8c b9       	out	0x0c, r24	; 12
+	O=(num - (H*100) - (T*10));
+	
+	uart_char(H+48);
+	uart_char(T+48);
+	uart_char(O+48);	
+}
+  be:	df 91       	pop	r29
+  c0:	cf 91       	pop	r28
+  c2:	08 95       	ret
+
+000000c4 <uart_read>:
+ 
+unsigned char uart_read()
+{
+		while((UCSRA & 0b10000000)==0);
+  c4:	5f 9b       	sbis	0x0b, 7	; 11
+  c6:	fe cf       	rjmp	.-4      	; 0xc4 <uart_read>
+	return UDR;
+  c8:	8c b1       	in	r24, 0x0c	; 12
+}
+  ca:	08 95       	ret
+
+000000cc <uart_delay>:
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+  cc:	88 ea       	ldi	r24, 0xA8	; 168
+  ce:	91 e6       	ldi	r25, 0x61	; 97
+  d0:	01 97       	sbiw	r24, 0x01	; 1
+  d2:	f1 f7       	brne	.-4      	; 0xd0 <uart_delay+0x4>
+ 
+void uart_delay(unsigned int delaytime)
+{
+	_delay_ms(100);
+}
+  d4:	08 95       	ret
+
+000000d6 <uart_string>:
+	UDR=t;
+}
+
+ 
+void uart_string(char a[])
+{
+  d6:	fc 01       	movw	r30, r24
+  d8:	04 c0       	rjmp	.+8      	; 0xe2 <uart_string+0xc>
+	//uart_delay(100);
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+  da:	5d 9b       	sbis	0x0b, 5	; 11
+  dc:	fe cf       	rjmp	.-4      	; 0xda <uart_string+0x4>
+	UDR=t;
+  de:	8c b9       	out	0x0c, r24	; 12
+  e0:	31 96       	adiw	r30, 0x01	; 1
+ 
+void uart_string(char a[])
+{
+	
+	int i;
+	for(i=0;a[i]!='\0';i++)
+  e2:	80 81       	ld	r24, Z
+  e4:	88 23       	and	r24, r24
+  e6:	c9 f7       	brne	.-14     	; 0xda <uart_string+0x4>
+	uart_char(a[i]);
+	uart_delay(100);
+  e8:	84 e6       	ldi	r24, 0x64	; 100
+  ea:	90 e0       	ldi	r25, 0x00	; 0
+  ec:	ef df       	rcall	.-34     	; 0xcc <uart_delay>
+}
+  ee:	08 95       	ret
+
+000000f0 <main>:
+#include<avr/io.h>
+#include <util/delay.h> 
+#include "uart.h"
+void main()
+{
+  f0:	0f 93       	push	r16
+  f2:	1f 93       	push	r17
+  f4:	cf 93       	push	r28
+  f6:	df 93       	push	r29
+    DDRB=0b00001111;
+  f8:	8f e0       	ldi	r24, 0x0F	; 15
+  fa:	87 bb       	out	0x17, r24	; 23
+#ifndef _UART_H_
+#define _UART_H_
+
+void uart_init()
+{
+	UCSRA=0;
+  fc:	1b b8       	out	0x0b, r1	; 11
+	UBRRH=0;
+  fe:	10 bc       	out	0x20, r1	; 32
+	UBRRL=8;
+ 100:	88 e0       	ldi	r24, 0x08	; 8
+ 102:	89 b9       	out	0x09, r24	; 9
+	UCSRB=0b00011000;
+ 104:	88 e1       	ldi	r24, 0x18	; 24
+ 106:	8a b9       	out	0x0a, r24	; 10
+	UCSRC=0b10000110;
+ 108:	86 e8       	ldi	r24, 0x86	; 134
+ 10a:	80 bd       	out	0x20, r24	; 32
+ 10c:	88 ea       	ldi	r24, 0xA8	; 168
+ 10e:	91 e6       	ldi	r25, 0x61	; 97
+ 110:	01 97       	sbiw	r24, 0x01	; 1
+ 112:	f1 f7       	brne	.-4      	; 0x110 <main+0x20>
+	 uart_init(); //115200	bits/sec								
+	_delay_ms(100);
+	PORTB=0b00000001;
+ 114:	81 e0       	ldi	r24, 0x01	; 1
+ 116:	88 bb       	out	0x18, r24	; 24
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+	UDR=t;
+ 118:	01 e4       	ldi	r16, 0x41	; 65
+ 11a:	1a e0       	ldi	r17, 0x0A	; 10
+ 11c:	c9 e1       	ldi	r28, 0x19	; 25
+ 11e:	d0 e0       	ldi	r29, 0x00	; 0
+ while(1)
+  {
+uart_string("kerala");
+ 120:	80 e6       	ldi	r24, 0x60	; 96
+ 122:	90 e0       	ldi	r25, 0x00	; 0
+ 124:	d8 df       	rcall	.-80     	; 0xd6 <uart_string>
+	//uart_delay(100);
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+ 126:	5d 9b       	sbis	0x0b, 5	; 11
+ 128:	fe cf       	rjmp	.-4      	; 0x126 <main+0x36>
+	UDR=t;
+ 12a:	0c b9       	out	0x0c, r16	; 12
+uart_char('A');
+uart_num(57);
+ 12c:	89 e3       	ldi	r24, 0x39	; 57
+ 12e:	9c df       	rcall	.-200    	; 0x68 <uart_num>
+	//uart_delay(100);
+}
+
+void uart_char(unsigned char t)
+{
+	while((UCSRA & 0b00100000)==0);
+ 130:	5d 9b       	sbis	0x0b, 5	; 11
+ 132:	fe cf       	rjmp	.-4      	; 0x130 <main+0x40>
+	UDR=t;
+ 134:	1c b9       	out	0x0c, r17	; 12
+ 136:	80 e1       	ldi	r24, 0x10	; 16
+ 138:	97 e2       	ldi	r25, 0x27	; 39
+ 13a:	fe 01       	movw	r30, r28
+ 13c:	31 97       	sbiw	r30, 0x01	; 1
+ 13e:	f1 f7       	brne	.-4      	; 0x13c <main+0x4c>
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 140:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 142:	d9 f7       	brne	.-10     	; 0x13a <main+0x4a>
+ 144:	ed cf       	rjmp	.-38     	; 0x120 <main+0x30>
+
+00000146 <__udivmodqi4>:
+ 146:	99 1b       	sub	r25, r25
+ 148:	79 e0       	ldi	r23, 0x09	; 9
+ 14a:	04 c0       	rjmp	.+8      	; 0x154 <__udivmodqi4_ep>
+
+0000014c <__udivmodqi4_loop>:
+ 14c:	99 1f       	adc	r25, r25
+ 14e:	96 17       	cp	r25, r22
+ 150:	08 f0       	brcs	.+2      	; 0x154 <__udivmodqi4_ep>
+ 152:	96 1b       	sub	r25, r22
+
+00000154 <__udivmodqi4_ep>:
+ 154:	88 1f       	adc	r24, r24
+ 156:	7a 95       	dec	r23
+ 158:	c9 f7       	brne	.-14     	; 0x14c <__udivmodqi4_loop>
+ 15a:	80 95       	com	r24
+ 15c:	08 95       	ret
+
+0000015e <__divmodhi4>:
+ 15e:	97 fb       	bst	r25, 7
+ 160:	09 2e       	mov	r0, r25
+ 162:	07 26       	eor	r0, r23
+ 164:	0a d0       	rcall	.+20     	; 0x17a <__divmodhi4_neg1>
+ 166:	77 fd       	sbrc	r23, 7
+ 168:	04 d0       	rcall	.+8      	; 0x172 <__divmodhi4_neg2>
+ 16a:	0c d0       	rcall	.+24     	; 0x184 <__udivmodhi4>
+ 16c:	06 d0       	rcall	.+12     	; 0x17a <__divmodhi4_neg1>
+ 16e:	00 20       	and	r0, r0
+ 170:	1a f4       	brpl	.+6      	; 0x178 <__divmodhi4_exit>
+
+00000172 <__divmodhi4_neg2>:
+ 172:	70 95       	com	r23
+ 174:	61 95       	neg	r22
+ 176:	7f 4f       	sbci	r23, 0xFF	; 255
+
+00000178 <__divmodhi4_exit>:
+ 178:	08 95       	ret
+
+0000017a <__divmodhi4_neg1>:
+ 17a:	f6 f7       	brtc	.-4      	; 0x178 <__divmodhi4_exit>
+ 17c:	90 95       	com	r25
+ 17e:	81 95       	neg	r24
+ 180:	9f 4f       	sbci	r25, 0xFF	; 255
+ 182:	08 95       	ret
+
+00000184 <__udivmodhi4>:
+ 184:	aa 1b       	sub	r26, r26
+ 186:	bb 1b       	sub	r27, r27
+ 188:	51 e1       	ldi	r21, 0x11	; 17
+ 18a:	07 c0       	rjmp	.+14     	; 0x19a <__udivmodhi4_ep>
+
+0000018c <__udivmodhi4_loop>:
+ 18c:	aa 1f       	adc	r26, r26
+ 18e:	bb 1f       	adc	r27, r27
+ 190:	a6 17       	cp	r26, r22
+ 192:	b7 07       	cpc	r27, r23
+ 194:	10 f0       	brcs	.+4      	; 0x19a <__udivmodhi4_ep>
+ 196:	a6 1b       	sub	r26, r22
+ 198:	b7 0b       	sbc	r27, r23
+
+0000019a <__udivmodhi4_ep>:
+ 19a:	88 1f       	adc	r24, r24
+ 19c:	99 1f       	adc	r25, r25
+ 19e:	5a 95       	dec	r21
+ 1a0:	a9 f7       	brne	.-22     	; 0x18c <__udivmodhi4_loop>
+ 1a2:	80 95       	com	r24
+ 1a4:	90 95       	com	r25
+ 1a6:	bc 01       	movw	r22, r24
+ 1a8:	cd 01       	movw	r24, r26
+ 1aa:	08 95       	ret
+
+000001ac <_exit>:
+ 1ac:	f8 94       	cli
+
+000001ae <__stop_program>:
+ 1ae:	ff cf       	rjmp	.-2      	; 0x1ae <__stop_program>
